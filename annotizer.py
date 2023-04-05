@@ -83,6 +83,7 @@ for stmt in g:
             potential_aliases.append(initials)
     
     
+    
     line = current_description.split(".")
     for str in line:
         formatted_output = "(\""
