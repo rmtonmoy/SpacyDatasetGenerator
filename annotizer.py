@@ -9,7 +9,7 @@ from rdflib import Graph
 
 entities = []
 description = []
-sourceFile = open('trainDataNew.txt', "a", encoding="utf-8")
+sourceFile = open('trainData100.txt', "a", encoding="utf-8")
 
 
 g = Graph()
@@ -20,6 +20,10 @@ counter = 0
 for stmt in g:
     #pprint.pprint(stmt)
     #print("\n\n")
+    counter = counter + 1
+    if counter < 100:
+        continue
+
     
     url = stmt[0]
     #print(url)
@@ -98,6 +102,8 @@ for stmt in g:
     line = current_description.split(".")
     for str in line:
         str = str.replace('\n', '')
+        #while(len(str) >= 1 and str[0] == ' '):
+           #str = str.replace(' ', '')
 
                 
         formatted_output = "(\""
@@ -122,10 +128,10 @@ for stmt in g:
             print(locs, end = "}),", file = sourceFile)
             #("I use a hammer to drive nails.", {"entities": [(9, 15, "PRODUCT")]}),
         
-    counter = counter + 1
     #print(counter)
     print(current_keyword)
-    if(counter == 100):
+    
+    if(counter == 200):
         break
     
 
