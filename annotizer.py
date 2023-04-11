@@ -9,13 +9,13 @@ from rdflib import Graph
 
 entities = []
 description = []
+sourceFile = open('trainDataNew.txt', "a", encoding="utf-8")
+
 
 g = Graph()
 g.parse("dump.rdf")
 
 counter = 0
-
-import pprint
 
 for stmt in g:
     #pprint.pprint(stmt)
@@ -35,12 +35,22 @@ for stmt in g:
     current_keyword = ""
     current_description = ""
 
+    if("%" in url):
+        continue
     
     if("/id/" in url):
+        temp = current_keyword = url.split("/id/")
+        if(len(temp) < 2):
+            continue
         current_keyword = url.split("/id/")[1]
     else:
+        temp = current_keyword = url.split("/doc/")
+        if(len(temp) < 2):
+            continue
         current_keyword = url.split("/doc/")[1]
     
+    if("." in current_keyword):
+        continue
     
     commentTagFound = False
     pTagFound = False
@@ -84,8 +94,12 @@ for stmt in g:
     
     
     
+
     line = current_description.split(".")
     for str in line:
+        str = str.replace('\n', '')
+
+                
         formatted_output = "(\""
         formatted_output = formatted_output + str + ".\", {\"entities\": "
         
@@ -94,20 +108,28 @@ for stmt in g:
             starts = 0
             if(str.lower().find(pattern.lower(), starts) != -1):
                 starts = str.lower().find(pattern.lower(), starts)
-                locs.append( (starts, starts + len(pattern) - 1, "PRODUCT") )
+                add = 0
+                if(starts+len(pattern) < len(str)):
+                    if(str[starts+len(pattern)] == ' '):
+                        add = 1
+                        
+                locs.append( (starts, starts + len(pattern) - 1 + add, 'PRODUCT') )
                 starts = starts + 1
                 
         
         if(len(locs) > 0):
-            print(formatted_output, end = "")
-            print(locs, end = "}),")
+            print(formatted_output, end = "", file = sourceFile)
+            print(locs, end = "}),", file = sourceFile)
             #("I use a hammer to drive nails.", {"entities": [(9, 15, "PRODUCT")]}),
+        
+    counter = counter + 1
+    #print(counter)
+    print(current_keyword)
+    if(counter == 100):
+        break
     
 
-    
-    
-    counter = counter + 1
-    break
-    
-        
+
+sourceFile.close()
+
     
