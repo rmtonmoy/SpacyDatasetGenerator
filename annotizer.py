@@ -9,7 +9,7 @@ from rdflib import Graph
 
 entities = []
 description = []
-sourceFile = open('trainData100.txt', "a", encoding="utf-8")
+sourceFile = open('trainData100.txt', "w", encoding="utf-8")
 
 
 g = Graph()
@@ -102,19 +102,22 @@ for stmt in g:
     line = current_description.split(".")
     for str in line:
         str = str.replace('\n', '')
-        #while(len(str) >= 1 and str[0] == ' '):
-           #str = str.replace(' ', '')
+        while(len(str) >= 1 and str[0] == ' '):
+           str = str[1:]
 
                 
         formatted_output = "(\""
         formatted_output = formatted_output + str + ".\", {\"entities\": "
+
+
+
         
         locs = []
         for pattern in potential_aliases:
             starts = 0
             if(str.lower().find(pattern.lower(), starts) != -1):
                 starts = str.lower().find(pattern.lower(), starts)
-                add = 0
+                add = 1
                 if(starts+len(pattern) < len(str)):
                     if(str[starts+len(pattern)] == ' '):
                         add = 1
@@ -131,7 +134,7 @@ for stmt in g:
     #print(counter)
     print(current_keyword)
     
-    if(counter == 200):
+    if(counter >= 200):
         break
     
 
