@@ -1,0 +1,5 @@
+- replace all ' with "
+- replace [ with (
+- repalce ] with )
+- Remove the last comma
+- Enclsoe everything within [] 

@@ -7,9 +7,11 @@ Created on Tue Apr  4 13:28:30 2023
 
 from rdflib import Graph
 
+import sys
+
 entities = []
 description = []
-sourceFile = open('trainData100.txt', "w", encoding="utf-8")
+sourceFile = open('productListFinal.txt', "a", encoding="utf-8")
 
 
 g = Graph()
@@ -17,12 +19,11 @@ g.parse("dump.rdf")
 
 counter = 0
 
+
 for stmt in g:
     #pprint.pprint(stmt)
     #print("\n\n")
     counter = counter + 1
-    if counter < 100:
-        continue
 
     
     url = stmt[0]
@@ -53,7 +54,7 @@ for stmt in g:
             continue
         current_keyword = url.split("/doc/")[1]
     
-    if("." in current_keyword):
+    '''if("." in current_keyword):
         continue
     
     commentTagFound = False
@@ -83,7 +84,7 @@ for stmt in g:
     #print(current_description)
     
     #entities.append(current_keyword)
-    #description.append(current_description)
+    #description.append(current_description)'''
     
     potential_aliases = []
     potential_aliases.append(current_keyword)
@@ -96,10 +97,14 @@ for stmt in g:
             
             potential_aliases.append(initials)
     
+    for aliases in potential_aliases:
+        print(aliases, file = sourceFile)
     
+    if counter % 100 == 0:
+        print(counter)
     
 
-    line = current_description.split(".")
+    '''line = current_description.split(".")
     for str in line:
         str = str.replace('\n', '')
         while(len(str) >= 1 and str[0] == ' '):
@@ -131,11 +136,9 @@ for stmt in g:
             print(locs, end = "}),", file = sourceFile)
             #("I use a hammer to drive nails.", {"entities": [(9, 15, "PRODUCT")]}),
         
-    #print(counter)
-    print(current_keyword)
+    print(counter)
+    print(current_keyword)'''
     
-    if(counter >= 200):
-        break
     
 
 
